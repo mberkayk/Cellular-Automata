@@ -59,7 +59,7 @@ public class Iteration {
 		return next;
 	}
 	
-	private int getActiveNeighbourCount(int i) {
+	int getActiveNeighbourCount(int i) {
 		//Eight Special cases
 		if(this.get(i).getY() == 0 && this.get(i).getX() == 0) {
 			
@@ -67,9 +67,9 @@ public class Iteration {
 			//Check the three neighbours
 			if(this.get(i+1).isActive()) {
 				result++;
-			}else if(this.get(i + gridWidth + 1).isActive()) {
+			}if(this.get(i + gridWidth + 1).isActive()) {
 				result++;
-			}else if(this.get(i + gridWidth).isActive()) {
+			}if(this.get(i + gridWidth).isActive()) {
 				result++;
 			}
 			
@@ -80,9 +80,9 @@ public class Iteration {
 			//Check the three neighbours
 			if(this.get(i-1).isActive()) {
 				result++;
-			}else if(this.get(i + gridWidth - 1).isActive()) {
+			}if(this.get(i + gridWidth - 1).isActive()) {
 				result++;
-			}else if(this.get(i + gridWidth).isActive()) {
+			}if(this.get(i + gridWidth).isActive()) {
 				result++;
 			}
 			
@@ -94,9 +94,9 @@ public class Iteration {
 			//Check the three neighbours
 			if(this.get(i+1).isActive()) {
 				result++;
-			}else if(this.get(i - gridWidth + 1).isActive()) {
+			}if(this.get(i - gridWidth + 1).isActive()) {
 				result++;
-			}else if(this.get(i - gridWidth).isActive()) {
+			}if(this.get(i - gridWidth).isActive()) {
 				result++;
 			}
 			
@@ -108,9 +108,9 @@ public class Iteration {
 			//Check the three neighbours
 			if(this.get(i-1).isActive()) {
 				result++;
-			}else if(this.get(i - gridWidth - 1).isActive()) {
+			}if(this.get(i - gridWidth - 1).isActive()) {
 				result++;
-			}else if(this.get(i - gridWidth).isActive()) {
+			}if(this.get(i - gridWidth).isActive()) {
 				result++;
 			}
 			
@@ -122,13 +122,13 @@ public class Iteration {
 			
 			if(this.get(i-1).isActive()) {
 				result++;
-			}else if(this.get(i+1).isActive()) {
+			}if(this.get(i+1).isActive()) {
 				result++;
-			}else if(this.get(i + gridWidth - 1).isActive()) {
+			}if(this.get(i + gridWidth - 1).isActive()) {
 				result++;
-			}else if(this.get(i + gridWidth).isActive()) {
+			}if(this.get(i + gridWidth).isActive()) {
 				result++;
-			}else if(this.get(i + gridWidth + 1).isActive()) {
+			}if(this.get(i + gridWidth + 1).isActive()) {
 				result++;
 			}
 			
@@ -140,13 +140,13 @@ public class Iteration {
 			
 			if(this.get(i-1).isActive()) {
 				result++;
-			}else if(this.get(i+1).isActive()) {
+			}if(this.get(i+1).isActive()) {
 				result++;
-			}else if(this.get(i - gridWidth - 1).isActive()) {
+			}if(this.get(i - gridWidth - 1).isActive()) {
 				result++;
-			}else if(this.get(i - gridWidth).isActive()) {
+			}if(this.get(i - gridWidth).isActive()) {
 				result++;
-			}else if(this.get(i - gridWidth + 1).isActive()) {
+			}if(this.get(i - gridWidth + 1).isActive()) {
 				result++;
 			}
 			
@@ -158,13 +158,13 @@ public class Iteration {
 			
 			if(this.get(i-gridWidth).isActive()) {
 				result++;
-			}else if(this.get(i - gridWidth +1).isActive()) {
+			}if(this.get(i - gridWidth +1).isActive()) {
 				result++;
-			}else if(this.get(i + 1).isActive()) {
+			}if(this.get(i + 1).isActive()) {
 				result++;
-			}else if(this.get(i + gridWidth + 1).isActive()) {
+			}if(this.get(i + gridWidth + 1).isActive()) {
 				result++;
-			}else if(this.get(i + gridWidth).isActive()) {
+			}if(this.get(i + gridWidth).isActive()) {
 				result++;
 			}
 			
@@ -176,13 +176,13 @@ public class Iteration {
 			
 			if(this.get(i-gridWidth).isActive()) {
 				result++;
-			}else if(this.get(i - gridWidth - 1).isActive()) {
+			}if(this.get(i - gridWidth - 1).isActive()) {
 				result++;
-			}else if(this.get(i - 1).isActive()) {
+			}if(this.get(i - 1).isActive()) {
 				result++;
-			}else if(this.get(i + gridWidth - 1).isActive()) {
+			}if(this.get(i + gridWidth - 1).isActive()) {
 				result++;
-			}else if(this.get(i + gridWidth).isActive()) {
+			}if(this.get(i + gridWidth).isActive()) {
 				result++;
 			}
 			

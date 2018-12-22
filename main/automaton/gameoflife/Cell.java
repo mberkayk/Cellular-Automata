@@ -1,8 +1,5 @@
 package main.automaton.gameoflife;
 
-import java.awt.Color;
-import java.awt.Graphics;
-
 public class Cell {
 	
 	private int x, y;
@@ -12,12 +9,6 @@ public class Cell {
 		this.x = x;
 		this.y = y;
 		this.setActive(b);
-	}
-	
-	public void display(Graphics g) {
-		
-		
-	
 	}
 
 	public int getX() {

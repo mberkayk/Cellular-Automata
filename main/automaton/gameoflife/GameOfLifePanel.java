@@ -51,8 +51,9 @@ public class GameOfLifePanel extends JPanel implements MouseListener {
 		Graphics2D g = image.createGraphics();
 		
 		//Display Cells
-		for(int i = 0; i < iterations.get(currentStep % 10).size(); i++) {
-			Cell c = iterations.get(currentStep % 10).get(i);
+		for(int i = 0; i < iterations.get(iterations.size()-1).size(); i++) {
+			
+			Cell c = iterations.get(iterations.size()-1).get(i);
 			
 			g.setColor(new Color(100, 100, 100));
 			if(c.isActive()) {
@@ -62,10 +63,16 @@ public class GameOfLifePanel extends JPanel implements MouseListener {
 			g.setColor(Color.black);
 			g.drawRect(c.getX()*cellSize, c.getY()*cellSize, cellSize, cellSize);
 			
+			g.setColor(Color.black);
+			int nc = iterations.get(iterations.size()-1).getActiveNeighbourCount(i);
+			if(nc != 0)
+			g.drawString(String.valueOf(nc), c.getX()*cellSize + cellSize/2, c.getY()*cellSize + cellSize/2);
+			
 		}
 		
+		//Bakcground for info display and Buttons
 		g.setColor(Color.white);
-		g.fillRect(0, 540, 600, 60);
+		g.fillRect(0, 541, 600, 60);
 		
 		//Display info
 		g.setColor(Color.black);
@@ -98,7 +105,7 @@ public class GameOfLifePanel extends JPanel implements MouseListener {
 			if(MY < cellSize*gridHeight) {
 				
 				//Get the clicked cell
-				Cell c = iterations.get(currentStep % 10).get(gridWidth * (MY/cellSize) +(MX/cellSize));
+				Cell c = iterations.get(iterations.size()-1).get(gridWidth * (MY/cellSize) +(MX/cellSize));
 				//Switch its state
 				c.setActive(!c.isActive());
 				renderImage();
@@ -109,11 +116,11 @@ public class GameOfLifePanel extends JPanel implements MouseListener {
 				if(MX < 470 && MX > 370 && MY < 590 && MY > 550) {
 					if(iterations.size() == 10) {
 
-						iterations.add((currentStep+1) % 10, this.iterations.get(currentStep % 10).createIteration());
-						iterations.remove((currentStep+1) % 10);
+						iterations.add(this.iterations.get(iterations.size()-1).createIteration());
+						iterations.remove(0);
 						currentStep++;
 					}else {
-						iterations.add(this.iterations.get(currentStep % 10).createIteration());
+						iterations.add(this.iterations.get(iterations.size()-1).createIteration());
 						currentStep++;
 					}
 				}
