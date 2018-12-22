@@ -23,6 +23,7 @@ public class GameOfLifePanel extends JPanel implements MouseListener {
 	ArrayList<Iteration> iterations;
 	
 	int currentStep;
+	int offset; // offset of displaying how many steps before the current step 
 	
 	private BufferedImage image;
 	
@@ -43,6 +44,7 @@ public class GameOfLifePanel extends JPanel implements MouseListener {
 		iterations.add(new Iteration(0, gridWidth, gridHeight));
 		
 		currentStep = 0;
+		offset = 0;
 		
 		renderImage();
 	}
@@ -51,9 +53,9 @@ public class GameOfLifePanel extends JPanel implements MouseListener {
 		Graphics2D g = image.createGraphics();
 		
 		//Display Cells
-		for(int i = 0; i < iterations.get(iterations.size()-1).size(); i++) {
+		for(int i = 0; i < iterations.get(iterations.size()-1 - offset).size(); i++) {
 			
-			Cell c = iterations.get(iterations.size()-1).get(i);
+			Cell c = iterations.get(iterations.size()-1 - offset).get(i);
 			
 			g.setColor(new Color(100, 100, 100));
 			if(c.isActive()) {
@@ -77,13 +79,25 @@ public class GameOfLifePanel extends JPanel implements MouseListener {
 		//Display info
 		g.setColor(Color.black);
 		g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
-		g.drawString("Current Step: " + currentStep, 0, 570);
+		g.drawString("Current Step: " + (currentStep - offset), 0, 570);
+
+		//Previous Button
+		g.setColor(Color.black);
+		g.fillRect(250, 550, 100, 40);
+		g.setColor(Color.white);
+		g.drawString("Previous", 270, 575);
 		
 		//Next Button
 		g.setColor(Color.black);
 		g.fillRect(370, 550, 100, 40);
 		g.setColor(Color.white);
-		g.drawString("NEXT", 400, 570);
+		g.drawString("Next", 405, 575);
+		
+		//Reset Button
+		g.setColor(Color.black);
+		g.fillRect(500, 550, 70, 40);
+		g.setColor(Color.white);
+		g.drawString("Reset", 517, 575);
 		
 		this.repaint();
 	}
@@ -112,17 +126,33 @@ public class GameOfLifePanel extends JPanel implements MouseListener {
 			
 			}else { //If some button is clicked
 				
-				//NEXT Button
-				if(MX < 470 && MX > 370 && MY < 590 && MY > 550) {
-					if(iterations.size() == 10) {
-
-						iterations.add(this.iterations.get(iterations.size()-1).createIteration());
-						iterations.remove(0);
-						currentStep++;
-					}else {
-						iterations.add(this.iterations.get(iterations.size()-1).createIteration());
-						currentStep++;
+				//Previous Button
+				if(MX < 350 && MX > 250 && MY < 590 && MY > 550) {
+					if(offset < 9 && currentStep - offset > 0) {
+						offset++;
 					}
+				}else if(MX < 470 && MX > 370 && MY < 590 && MY > 550) { //Next Button
+					if(offset == 0) {
+						if(iterations.size() == 10) {
+	
+							iterations.add(this.iterations.get(iterations.size()-1).createIteration());
+							iterations.remove(0);
+							currentStep++;
+						}else {
+							iterations.add(this.iterations.get(iterations.size()-1).createIteration());
+							currentStep++;
+						}
+					}else {
+						offset--;
+					}
+				}else if(MX < 570 && MX > 500 && MY < 590 && MY > 550) { // RESET Button
+				
+					currentStep = 0;
+					offset = 0;
+					
+					iterations.removeAll(iterations);
+					iterations.add(new Iteration(0, gridWidth, gridHeight));
+					
 				}
 				
 				renderImage();
