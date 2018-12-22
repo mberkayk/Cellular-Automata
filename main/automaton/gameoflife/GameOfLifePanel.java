@@ -2,87 +2,126 @@ package main.automaton.gameoflife;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
-import main.Main;
-
 public class GameOfLifePanel extends JPanel implements MouseListener {
 
 	private static final long serialVersionUID = 1L;
+	
+	int cellSize;
+	
+	int gridWidth, gridHeight;
+	
+	ArrayList<Iteration> iterations;
+	
+	int currentStep;
+	
+	private BufferedImage image;
 	
 	public GameOfLifePanel(int w, int h) {
 		super();
 		this.setPreferredSize(new Dimension(w, h));
 		this.setSize(w, h);
 		this.addMouseListener(this);
-		init();
-	}
-	
-	
-	int cellSize = 30;
-	
-	int gridWidth = (int) Math.floor(Main.WIDTH / cellSize);
-	int gridHeight =(int) Math.floor((Main.HEIGHT*3/4) / cellSize);
-	
-	byte[] cells = new byte[gridWidth*gridHeight];
-	ArrayList<Iteration> iterations;
-	
-	int currentStep;
-	
-	
-	public void init() {
-		cellSize = 30;
-		gridWidth = (int) Math.floor(Main.WIDTH / cellSize);
-		gridHeight =(int) Math.floor(Main.HEIGHT / cellSize);
-		cells = new byte[gridWidth*gridHeight];
+		image = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		
+		//Set the size of the step 0
+		gridWidth = 20;
+		gridHeight = 18;
+		
+		cellSize = getWidth() / gridWidth;
+		
 		iterations = new ArrayList<Iteration>();
-		iterations.add(new Iteration(0));
+		iterations.add(new Iteration(0, gridWidth, gridHeight));
+		
 		currentStep = 0;
-		iterations.get(currentStep).setActive(2);
-		iterations.get(currentStep).setActive(21);
+		
+		renderImage();
 	}
-
-	@Override
-	public void paint(Graphics p) {
-		Graphics2D g = (Graphics2D)p;
-		
-		//Background
-		int bg = 70;
-		g.setColor(new Color(bg, bg, bg));
-		g.fillRect(0, 0, Main.WIDTH, Main.HEIGHT*3/4);
-		
+	
+	public void renderImage() {
+		Graphics2D g = image.createGraphics();
 		
 		//Display Cells
-		int ac = 125; // Color of the active cells
-		g.setColor(new Color(ac, ac, ac));
-		for(int i = 0; i < iterations.get(currentStep).size(); i++) {
-			int cellX = (int)((iterations.get(currentStep).get(i) % gridWidth)*cellSize);
-			int cellY = (int)(Math.floor(iterations.get(currentStep).get(i) / gridWidth)*cellSize);
-			g.fillRect(cellX, cellY, cellSize, cellSize);
+		for(int i = 0; i < iterations.get(currentStep % 10).size(); i++) {
+			Cell c = iterations.get(currentStep % 10).get(i);
+			
+			g.setColor(new Color(100, 100, 100));
+			if(c.isActive()) {
+				g.setColor(new Color(125, 125, 125));
+			}
+			g.fillRect(c.getX()*cellSize, c.getY()*cellSize, cellSize, cellSize);
+			g.setColor(Color.black);
+			g.drawRect(c.getX()*cellSize, c.getY()*cellSize, cellSize, cellSize);
+			
 		}
 		
+		g.setColor(Color.white);
+		g.fillRect(0, 540, 600, 60);
 		
-		//Display Lines
-		for(int i = cellSize; i < Main.WIDTH; i += cellSize) {
-			g.setColor(Color.black);
-			g.drawLine(i, 0, i, Main.HEIGHT*3/4);
-		}
-		for(int i = cellSize; i < Main.HEIGHT*3/4; i += cellSize) {
-			g.setColor(Color.black);
-			g.drawLine(0, i, Main.WIDTH, i);
-		}
+		//Display info
+		g.setColor(Color.black);
+		g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
+		g.drawString("Current Step: " + currentStep, 0, 570);
+		
+		//Next Button
+		g.setColor(Color.black);
+		g.fillRect(370, 550, 100, 40);
+		g.setColor(Color.white);
+		g.drawString("NEXT", 400, 570);
+		
+		this.repaint();
 	}
 	
 	@Override
-	public void mouseClicked(MouseEvent arg0) {
-		System.out.println("mouse clicked");
-		this.repaint();
+	public void paint(Graphics g) {
+		g.drawImage(image, 0, 0, null);
+	}
+	
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		//If left Mouse Button has been clicked
+		if(e.getButton() == MouseEvent.BUTTON1) {
+			
+			int MX = e.getX();
+			int MY = e.getY();
+			
+			//If one of the cells has been clicked
+			if(MY < cellSize*gridHeight) {
+				
+				//Get the clicked cell
+				Cell c = iterations.get(currentStep % 10).get(gridWidth * (MY/cellSize) +(MX/cellSize));
+				//Switch its state
+				c.setActive(!c.isActive());
+				renderImage();
+			
+			}else { //If some button is clicked
+				
+				//NEXT Button
+				if(MX < 470 && MX > 370 && MY < 590 && MY > 550) {
+					if(iterations.size() == 10) {
+
+						iterations.add((currentStep+1) % 10, this.iterations.get(currentStep % 10).createIteration());
+						iterations.remove((currentStep+1) % 10);
+						currentStep++;
+					}else {
+						iterations.add(this.iterations.get(currentStep % 10).createIteration());
+						currentStep++;
+					}
+				}
+				
+				renderImage();
+				
+			}
+		}
 	}
 
 	@Override
@@ -107,33 +146,6 @@ public class GameOfLifePanel extends JPanel implements MouseListener {
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		
-	}
-	
-	
-	class Iteration {
-		private int gen;
-		private ArrayList<Integer> activeCells;
-		
-		public Iteration(int gen) {
-			this.gen = gen;
-			activeCells = new ArrayList<Integer>();
-		}
-		
-		void setActive(int i) {
-			activeCells.add(i);
-		}
-		
-		int getGen() {
-			return gen;
-		}
-		
-		int get(int i) {
-			return activeCells.get(i);
-		}
-		
-		int size() {
-			return activeCells.size();
-		} 
 	}
 	
 }
