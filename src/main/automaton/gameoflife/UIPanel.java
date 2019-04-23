@@ -1,6 +1,7 @@
 package main.automaton.gameoflife;
 
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -13,13 +14,20 @@ public class UIPanel extends JPanel implements ActionListener {
 	
 	GameOfLifePanel gp;
 	
-	private JButton preBtn, nextBtn, resetBtn;
 	private JLabel crntStepLbl;
+	
+	private JPanel btnPanel;
+	private JButton preBtn, nextBtn, resetBtn;
 	
 	public UIPanel(ContainerPanel p) {
 		gp = p.gp;
 		
-		this.setLayout(new FlowLayout());
+		this.setLayout(new GridLayout(1, 2));
+
+		crntStepLbl = new JLabel("Current Step: " + (gp.currentStep - gp.offset));
+		this.add(crntStepLbl);
+		
+		btnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		
 		preBtn = new JButton("Previous");
 		nextBtn = new JButton("Next");
@@ -33,12 +41,11 @@ public class UIPanel extends JPanel implements ActionListener {
 		nextBtn.addActionListener(this);
 		resetBtn.addActionListener(this);
 		
-		this.add(preBtn);
-		this.add(nextBtn);
-		this.add(resetBtn);
+		btnPanel.add(preBtn);
+		btnPanel.add(nextBtn);
+		btnPanel.add(resetBtn);
 		
-		crntStepLbl = new JLabel("Current Step: " + (gp.currentStep - gp.offset));
-		this.add(crntStepLbl, FlowLayout.LEFT);
+		this.add(btnPanel);
 		
 		this.setVisible(true);
 		

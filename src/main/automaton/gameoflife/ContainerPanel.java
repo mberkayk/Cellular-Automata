@@ -15,9 +15,10 @@ public class ContainerPanel extends JPanel {
 		gp = new GameOfLifePanel(w, h);
 		uip = new UIPanel(this);
 		
-		this.setLayout(new BorderLayout());
+		BorderLayout bl = new BorderLayout();
+		this.setLayout(bl);
 		this.add(gp, BorderLayout.CENTER);
-		this.add(uip, BorderLayout.SOUTH);
+		this.add(uip, BorderLayout.NORTH);
 		
 		
 	}
